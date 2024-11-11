@@ -1,63 +1,36 @@
-import { buttonStyle, pocketItem, colors, save, load } from "./commons";
-import type { Storage } from "./commons";
-import { buildElement } from "./domkraft";
+import { save, load } from "./commons";
+import type { Storage, WipeMode } from "./commons";
 
-const rofBox = document.querySelector("#rof") as HTMLInputElement;
+const modeRadio = Array.from(document.querySelectorAll<HTMLInputElement>(`input[name="mode"]`));
+const bleachBox = document.querySelector<HTMLInputElement>("input#bleach")!;
+const whitelistBox = document.querySelector("textarea")!;
+const saveButton = document.querySelector("button")!;
 
-function controlsButton(caption: string, color: string, cb: (event: Event, element: HTMLElement) => void){
-	return buildElement({
-		style: {
-			...buttonStyle(color)
-		},
-		textContent: caption,
-		events: {
-			click: cb,
-
-		}
-	});
-}
-
-function renderItems(pocket: Storage["pocket"]){
-	return (pocket.map(links => pocketItem(
-		links,
-		[
-			["Remove", colors.red, async (el) => {
-				el.parentElement?.parentElement?.parentElement?.remove();
-				const index = pocket.findIndex(item => item === links);
-				if (index >= 0){
-					pocket.splice(index, 1);
-					await save("pocket", pocket);
-				}
-			}]
-		]
-	)));
-}
+main();
 
 async function main(){
-	const [prefs, pocket] = await Promise.all([load("prefs"), load("pocket")]);
+	whitelistBox.placeholder = "Whitelist users\nEach line is username as in URL"
+	const [prefs, whitelist] = await Promise.all([load("prefs"), load("whitelist")]);
 
-	rofBox.checked = prefs.removeOnFill;
-	rofBox.addEventListener("change", e => {
-		prefs.removeOnFill = rofBox.checked;
-		console.log(prefs);
+	bleachBox.checked = prefs.bleach;
+	whitelistBox.value = whitelist.join("\n");
+
+	if (prefs.mode === "onspot")
+		modeRadio[0].checked = true;
+	else
+		modeRadio[1].checked = true;
+
+	saveButton.addEventListener("click", () => {
+		prefs.mode = modeRadio[0].checked ? "onspot" : "onrequest";
+		prefs.bleach = bleachBox.checked;
 		save("prefs", prefs);
+		save("whitelist", parseWhitelist(whitelistBox.value));
 	});
-
-	const listBox = document.querySelector(".list") as HTMLElement;
-	const controls = buildElement({
-		className: "row",
-		children: [
-			controlsButton("Remove all", colors.red, () => {
-				document.querySelectorAll(".pocket-item").forEach(i => i.remove());
-				save("pocket", []);
-			}),
-			controlsButton("Reload", colors.gelbooru, async () => {
-				const pocket = await load("pocket");
-				document.querySelectorAll(".pocket-item").forEach(i => i.remove());
-				listBox.append(...renderItems(pocket));
-			})
-		]
-	});
-	listBox.append(controls, ...renderItems(pocket));
 }
-main();
+
+function parseWhitelist(raw: string): string[] {
+	return raw
+		.split("\n")
+		.map(line => line.trim())
+		.filter(line => line);
+}

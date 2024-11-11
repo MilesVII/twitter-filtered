@@ -1,13 +1,13 @@
 {
 	"manifest_version": 3,
 	"name": "Twitter filtered",
-	"version": "0.0.0",
+	"version": "69.420.0",
 
 	"description": "Wipe bluechecks from Twitter replies",
 
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "gut@milesseventh.com"
+			"id": "tf@milesseventh.com"
 		}
 	},
 
@@ -18,14 +18,11 @@
 	},
 
 	"permissions": [
-	],
-
-	"host_permissions": [
-		"https://corsproxy.io/*"
+		"storage"
 	],
 
 	"content_scripts": [{
-		"matches": ["*://*.twitter.com/*"],
+		"matches": ["*://*.twitter.com/*", "*://*.x.com/*"],
 		"js": ["js/twitter.js"]
 	}],
 

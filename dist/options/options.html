@@ -55,11 +55,30 @@
 
 	<body>
 		<div class="list">
+			<button>Save</button>
+
+			<fieldset>
+				<legend>Operating mode:</legend>
+			
+				<div>
+					<input type="radio" id="onspot" name="mode" value="onspot" />
+					<label for="onspot">Wipe bluechecks as soon as possible</label>
+				</div>
+			
+				<div>
+					<input type="radio" id="onrequest" name="mode" value="onrequest" />
+					<label for="onrequest">Wipe bluechecks on blue cross click</label>
+				</div>
+			</fieldset>
+			
 			<div class="row">
-				<input type="checkbox" id="rof" value="rof">
-				<label for="rof">Remove pocket item on fill</label>
+				<input type="checkbox" id="bleach" />
+				<label for="bleach">Bleach bluechecks in transparentizing acid</label>
 			</div>
+
+			<textarea id="whitelist" rows="7"></textarea>
 		</div>
+
 		<script src="../js/options.js"></script>
 	</body>
 </html>

@@ -1,8 +1,8 @@
 {
 	"type": "module",
 	"scripts": {
-		"build": "esbuild src/twitter.ts --bundle --sourcemap --outdir=dist/js",
-		"watch": "esbuild src/twitter.ts --bundle --sourcemap --watch --outdir=dist/js"
+		"build": "esbuild src/twitter.ts src/options.ts --define:global=window --bundle --sourcemap --outdir=dist/js",
+		"watch": "esbuild src/twitter.ts src/options.ts --define:global=window --bundle --sourcemap --watch --outdir=dist/js"
 	},
 	"devDependencies": {
 		"@types/chrome": "^0.0.254",
