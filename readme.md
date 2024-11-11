@@ -6,8 +6,8 @@ Hurr durr
 
 ## Build instructions
 ```
-git clone https://github.com/MilesVII/gelbooru-upload-tools.git
-cd gelbooru-upload-tools
+git clone https://github.com/MilesVII/twitter-filtered.git
+cd twitter-filtered
 npm i
 npm run build
 ```
